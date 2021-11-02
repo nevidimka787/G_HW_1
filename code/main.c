@@ -4,19 +4,20 @@
 #include <stdbool.h>
 #include <time.h>
 
+#include "ShakeSort.h"
+
 //#include <sortlib1.h>
 //#include <sortlib2.h>
 
-void SortFunc1(unsigned* _array){}
-void SortFunc2(unsigned* _array){}
+void SortFunc2(uint64_t* _array, size_t _size){}
 
-#define LOG1_FILE "log1.txt"
-#define LOG2_FILE "log2.txt"
+#define LOG1_FILE "logs/log1.txt"
+#define LOG2_FILE "logs/log2.txt"
 
 #define ERROR -1
 
 bool CharIsNumber(char _char);
-double GetSortTime(void SortFunc(unsigned*), unsigned* array);
+double GetSortTime(void SortFunc(uint64_t*, size_t), uint64_t* _array, size_t _size);
 
 int main(int argc, char** argv)
 {
@@ -27,8 +28,8 @@ int main(int argc, char** argv)
     }
     
     FILE* data_file = fopen(argv[1], "r");
-    FILE* log1_file = fopen(LOG1_FILE, "w");
-    FILE* log2_file = fopen(LOG2_FILE, "w");
+    FILE* log1_file = fopen(LOG1_FILE, "w+");
+    FILE* log2_file = fopen(LOG2_FILE, "w+");
     
     if(data_file == NULL)
     {
@@ -47,16 +48,18 @@ int main(int argc, char** argv)
         exit(ERROR);
     }
     
-    unsigned* array;
-    unsigned array_length = 0;
+    uint64_t* array;
+    size_t array_length = 0;
     
-    unsigned line_number = 0;
-    unsigned line_symbol = 0;
+    size_t line_number = 0;
+    size_t line_symbol = 0;
     
     char* line;
     
-    array = (unsigned*)malloc(sizeof(unsigned));
+    array = (uint64_t*)malloc(sizeof(uint64_t));
     line = (char*)malloc(sizeof(char));
+    
+    printf("\n\n");
     
     while((line[line_symbol] = getc(data_file)) != EOF)
     {
@@ -66,6 +69,12 @@ int main(int argc, char** argv)
             CharIsNumber(line[line_symbol - 1]))
         {
             array_length++;
+            array = (uint64_t*)realloc(array, sizeof(uint64_t) * array_length);
+            line = (char*)realloc(line, sizeof(char) * (line_symbol + 2));
+            line[line_symbol + 1] = '\0';
+            sscanf(line, "%lu", &array[array_length - 1]);
+            line_symbol = -1;//it is UINT_MAX
+            
         }
         else if(line[line_symbol] == '\n')
         {
@@ -74,26 +83,27 @@ int main(int argc, char** argv)
                 CharIsNumber(line[line_symbol - 1]))
             {
                 array_length++;
+                array = (uint64_t*)realloc(array, sizeof(uint64_t) * array_length);
+                line = (char*)realloc(line, sizeof(char) * (line_symbol + 2));
+                line[line_symbol + 1] = '\0';
+                sscanf(line, "%lu", &array[array_length - 1]);
+                line_symbol = -1;//it is UINT_MAX
             }
             
             if(array_length == 0)
             {
-                printf("WARNING::MAIN::Line number %u is void.", line_number);
-            }
-            else
-            {
-                array = (unsigned*)realloc(array, sizeof(unsigned) * array_length);
-                for(unsigned element = 0; element < array_length; element++)
-                {
-                    fscanf(data_file, "%u", &array[element]);
-                }
-                
-                fprintf(log1_file, "%lf\n", GetSortTime(SortFunc1, array));
-                fprintf(log2_file, "%lf\n", GetSortTime(SortFunc2, array));
-                
-                array_length = 0;
+                printf("WARNING::MAIN::Line number %lu is void.\n", line_number);
                 line_number++;
                 line_symbol = -1;//it is UINT_MAX
+            }
+            else
+            {      
+                fprintf(log1_file, "%lf\n", GetSortTime(ShakeSort, array, array_length));
+                fprintf(log2_file, "%lf\n", GetSortTime(SortFunc2, array, array_length));
+                array = (uint64_t*)realloc(array, sizeof(uint64_t));
+                array_length = 0;
+                line_number++;
+                printf("Line %lu was sorted.\n", line_number);
             }
             
         }
@@ -101,6 +111,10 @@ int main(int argc, char** argv)
         line_symbol++;
         line = (char*)realloc(line, sizeof(char) * (line_symbol + 1));
     }
+    
+    printf(
+        "\n\nProgram finished succsessfully.\n%lu lines was sorted.\nResults was wrote in\n%s\n%s\n",
+        line_number, LOG1_FILE, LOG2_FILE);
 }
 
 
@@ -109,11 +123,11 @@ bool CharIsNumber(char _char)
     return '0' <= _char && _char <= '9';
 }
 
-double GetSortTime(void SortFunc(unsigned*), unsigned* array)
+double GetSortTime(void SortFunc(uint64_t*, size_t), uint64_t* _array, size_t _size)
 {
-    unsigned long start_time = clock();
+    time_t start_time = clock();
     
-    SortFunc(array);
+    SortFunc(_array, _size);
     
     return (double)(clock() - start_time) / (double)CLOCKS_PER_SEC;
 }

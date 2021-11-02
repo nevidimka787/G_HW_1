@@ -1,7 +1,7 @@
-#include "library.h"
+#include "ShakeSort.h"
 
 
-uint64_t shake(uint64_t *input, size_t size) {
+void ShakeSort(uint64_t *input, size_t size) {
     size_t left = 0;
     size_t right = size - 1;
     bool flag = true;
@@ -22,5 +22,5 @@ uint64_t shake(uint64_t *input, size_t size) {
         }
         ++left;
     }
-    return input;
+    //return input;
 }
