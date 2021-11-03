@@ -52,3 +52,5 @@ Mkfile.old
 dkms.conf
 logs/log1.txt
 logs/log2.txt
+*.log
+*.bin

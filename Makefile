@@ -12,6 +12,11 @@ BIN_FILES = "$(BIN)/main.o" "$(BIN)/ShakeSort.o"
 
 all: $(MAKE)
 
+array_creator:
+	rm -rf "$(BIN)/ArrayFileCreator.o"
+	$(CC) -c "$(CODE)/ArrayFileCreator.c" -o "$(BIN)/ArrayFileCreator.o"
+	$(CC) "$(BIN)/ArrayFileCreator.o" -o "ArrCreator.elf"
+
 rebuild: clean all
 
 $(MAKE): $(BIN_FILES)
