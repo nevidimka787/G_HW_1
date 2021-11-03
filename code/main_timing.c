@@ -38,11 +38,15 @@ int main(int argc, char** argv)
         exit(ERROR);
     }
     
+    printf("Timing program was began.\n");
+    
     char* log_files_way = "logs";
     char* log1_file_name = "log1_group";
     char* log2_file_name = "log2_group";
+    
     char* log1_file_full_name = (char*)malloc(sizeof(char));
     char* log2_file_full_name = (char*)malloc(sizeof(char));
+    
     log1_file_full_name[0] = '\0';
     log2_file_full_name[0] = '\0';
     
@@ -72,12 +76,14 @@ int main(int argc, char** argv)
         uint64_t* array = (uint64_t*)malloc(sizeof(uint64_t) * array_length);
         fread(array, sizeof(uint64_t), array_length, data_file);
         
-        uint64_t* clone_arr = CloneArray(array, array_length);
-        fprintf(log1_file, "%lf\n", GetSortTime(ShakeSort, array, array_length));
-        fprintf(log2_file, "%lf\n", GetSortTime(SortFunc2, clone_arr, array_length));
+        uint64_t* clone1_arr = CloneArray(array, array_length);
+        uint64_t* clone2_arr = CloneArray(array, array_length);
+        fprintf(log1_file, "%lf\n", GetSortTime(ShakeSort, clone1_arr, array_length));
+        fprintf(log2_file, "%lf\n", GetSortTime(SortFunc2, clone2_arr, array_length));
         
         free(array);
-        free(clone_arr);
+        free(clone1_arr);
+        free(clone2_arr);
         
         line_number++;
         
@@ -105,8 +111,11 @@ int main(int argc, char** argv)
         {
             printf("%lu%%\n", (line_number % LINES_IN_GROUP_COUNT) / (LINES_IN_GROUP_COUNT / 10u) * 10u);
         }
-        //printf("Line: %lu was completed.\n", line_number);
     }
+    
+    fclose(log1_file);
+    fclose(log2_file);
+    fclose(data_file);
     
     printf(
         "\n\nProgram finished succsessfully.\n%lu lines was sorted.\nResults was wrote in %s folder.\n",
@@ -151,7 +160,6 @@ double GetSortTime(void SortFunc(uint64_t*, size_t), uint64_t* _array, size_t _s
     
     return (double)(clock() - start_time) / (double)CLOCKS_PER_SEC;
 }
-
 
 
 
