@@ -41,8 +41,8 @@ int main(int argc, char** argv)
     printf("Timing program was began.\n");
     
     char* log_files_way = "logs";
-    char* log1_file_name = "log1_group";
-    char* log2_file_name = "log2_group";
+    char* log1_file_name = "log1";
+    char* log2_file_name = "log2";
     
     char* log1_file_full_name = (char*)malloc(sizeof(char));
     char* log2_file_full_name = (char*)malloc(sizeof(char));
@@ -50,13 +50,10 @@ int main(int argc, char** argv)
     log1_file_full_name[0] = '\0';
     log2_file_full_name[0] = '\0';
     
-    
-    unsigned group_number = 1u;
-    
-    sprintf(log1_file_full_name, "%s/%s_%u.log",
-        log_files_way, log1_file_name, group_number);
-    sprintf(log2_file_full_name, "%s/%s_%u.log",
-        log_files_way, log2_file_name, group_number);
+    sprintf(log1_file_full_name, "%s/%s.log",
+        log_files_way, log1_file_name);
+    sprintf(log2_file_full_name, "%s/%s.log",
+        log_files_way, log2_file_name);
     
     FILE* data_file = fopen(argv[1], "r");    
     FILE* log1_file = fopen(log1_file_full_name, "w+");
@@ -78,39 +75,14 @@ int main(int argc, char** argv)
         
         uint64_t* clone1_arr = CloneArray(array, array_length);
         uint64_t* clone2_arr = CloneArray(array, array_length);
-        fprintf(log1_file, "%lf\n", GetSortTime(ShakeSort, clone1_arr, array_length));
-        fprintf(log2_file, "%lf\n", GetSortTime(SortFunc2, clone2_arr, array_length));
+        fprintf(log1_file, "%lu\t%lf\n", array_length, GetSortTime(ShakeSort, clone1_arr, array_length));
+        fprintf(log2_file, "%lu\t%lf\n", array_length, GetSortTime(SortFunc2, clone2_arr, array_length));
         
         free(array);
         free(clone1_arr);
         free(clone2_arr);
         
         line_number++;
-        
-        if(!(line_number % LINES_IN_GROUP_COUNT))
-        {
-            printf("Group: %u was completed\n", group_number);
-            group_number++;
-            
-            fclose(log1_file);
-            fclose(log2_file);
-            log1_file_full_name = (char*)realloc(log1_file_full_name, sizeof(char));
-            log2_file_full_name = (char*)realloc(log2_file_full_name, sizeof(char));
-            
-            log1_file_full_name[0] = '\0';
-            log1_file_full_name[0] = '\0';
-            sprintf(log1_file_full_name, "%s/%s_%u.log",
-                log_files_way, log1_file_name, group_number);
-            sprintf(log2_file_full_name, "%s/%s_%u.log",
-                log_files_way, log2_file_name, group_number);
-            
-            log1_file = fopen(log1_file_full_name, "w+");
-            log2_file = fopen(log2_file_full_name, "w+");
-        }
-        else if(!(line_number % (LINES_IN_GROUP_COUNT / 10u)))
-        {
-            printf("%lu%%\n", (line_number % LINES_IN_GROUP_COUNT) / (LINES_IN_GROUP_COUNT / 10u) * 10u);
-        }
     }
     
     fclose(log1_file);

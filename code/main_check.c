@@ -83,7 +83,7 @@ int main(int argc, char** argv)
         SortFunc2(clone2_arr, array_length);
         
         CheckArray(array, clone1_arr, array_length, error_log1_file);
-        //CheckArray(array, clone2_arr, array_length, error_log2_file);
+        CheckArray(array, clone2_arr, array_length, error_log2_file);
         
         free(array);
         free(clone1_arr);
