@@ -56,3 +56,9 @@ uint64_t* quicksort (uint64_t* array, size_t array_length) {
         return res_arr;
     }
 }
+
+void q_sort (uint64_t* array, size_t array_length) {
+    uint64_t* sorted_array = quicksort(array, array_length);
+    free(array);
+    array = sorted_array;
+}
