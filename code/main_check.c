@@ -5,6 +5,7 @@
 #include <time.h>
 
 #include "ShakeSort.h"
+#include "QuickSortM.h"
 
 //#include <sortlib1.h>
 //#include <sortlib2.h>
@@ -76,14 +77,14 @@ int main(int argc, char** argv)
         uint64_t* array = (uint64_t*)malloc(sizeof(uint64_t) * array_length);
         fread(array, sizeof(uint64_t), array_length, data_file);
         
-        uint64_t* clone1_arr = CloneArray(array, array_length);
+        uint64_t* clone1_arr;// = CloneArray(array, array_length);
         uint64_t* clone2_arr = CloneArray(array, array_length);
         
-        ShakeSort(clone1_arr, array_length);
-        SortFunc2(clone2_arr, array_length);
+        //ShakeSort(clone1_arr, array_length);
+        QuickSort(clone2_arr, array_length);
         
-        CheckArray(array, clone1_arr, array_length, error_log1_file);
-        CheckArray(array, clone2_arr, array_length, error_log2_file);
+        //CheckArray(array, clone1_arr, array_length, error_log1_file);
+        CheckArray(array, clone1_arr, array_length, error_log2_file);
         
         free(array);
         free(clone1_arr);
@@ -159,12 +160,13 @@ void CheckArray(uint64_t* _input_array, uint64_t* _sort_array, size_t _array_siz
             {
                 fprintf(_log_f, "%lu ", _input_array[i]);
             }
-            fprintf(_log_f, "Sorted array:\n");
+            fprintf(_log_f, "\nSorted array:\n");
             for(size_t i = 0; i < _array_size; i++)
             {
                 fprintf(_log_f, "%lu ", _sort_array[i]);
             }
             fprintf(_log_f, "\n\n");
+            return;
         }
     }
 }

@@ -5,11 +5,8 @@
 #include <time.h>
 
 #include "ShakeSort.h"
+#include "QuickSortM.h"
 
-//#include <sortlib1.h>
-//#include <sortlib2.h>
-
-void SortFunc2(uint64_t* _array, size_t _size){}
 
 #define LOG1_FILE "logs/log1.txt"
 #define LOG2_FILE "logs/log2.txt"
@@ -76,7 +73,7 @@ int main(int argc, char** argv)
         uint64_t* clone1_arr = CloneArray(array, array_length);
         uint64_t* clone2_arr = CloneArray(array, array_length);
         fprintf(log1_file, "%lu\t%lf\n", array_length, GetSortTime(ShakeSort, clone1_arr, array_length));
-        fprintf(log2_file, "%lu\t%lf\n", array_length, GetSortTime(SortFunc2, clone2_arr, array_length));
+        fprintf(log2_file, "%lu\t%lf\n", array_length, GetSortTime(QuickSort, clone2_arr, array_length));
         
         free(array);
         free(clone1_arr);

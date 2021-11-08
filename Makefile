@@ -7,7 +7,7 @@ CLEAN_COMMAND = rm -rf $(BIN)/*.o *.o
 
 LIBS = 
 
-SORTS = "$(BIN)/ShakeSort.o"
+SORTS = "$(BIN)/ShakeSort.o" "$(BIN)/QuickSortM.o"
 
 all: timing check
 
@@ -33,8 +33,15 @@ rebuild: clean all
 	
 	
 	
+"$(BIN)/QuickSortM.o":
+	$(CC) -c "$(CODE)/QuickSortM.c" -o "$(BIN)/QuickSortM.o"
+	
 "$(BIN)/ShakeSort.o":
 	$(CC) -c "$(CODE)/ShakeSort.c" -o "$(BIN)/ShakeSort.o"
+	
+QuickSortM.o:
+	rm -rf "$(BIN)/QuickSortM.o"
+	$(CC) -c "$(CODE)/QuickSortM.c" -o "$(BIN)/QuickSortM.o"
 	
 ShakeSort.o:
 	rm -rf "$(BIN)/ShakeSort.o"
