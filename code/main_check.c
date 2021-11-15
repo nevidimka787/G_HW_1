@@ -5,7 +5,7 @@
 #include <time.h>
 
 #include "ShakeSort.h"
-#include "QuickSortM.h"
+#include "IntroSort.h"
 
 //#include <sortlib1.h>
 //#include <sortlib2.h>
@@ -81,13 +81,13 @@ int main(int argc, char** argv)
         uint64_t* clone2_arr = CloneArray(array, array_length);
         
         //ShakeSort(clone1_arr, array_length);
-        QuickSort(clone2_arr, array_length);
+        IntroSort(clone2_arr, array_length);
         
         //CheckArray(array, clone1_arr, array_length, error_log1_file);
-        CheckArray(array, clone1_arr, array_length, error_log2_file);
+        CheckArray(array, clone2_arr, array_length, error_log2_file);
         
         free(array);
-        free(clone1_arr);
+        //free(clone1_arr);
         free(clone2_arr);
         
         line_number++;

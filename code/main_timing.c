@@ -5,23 +5,19 @@
 #include <time.h>
 
 #include "ShakeSort.h"
-#include "QuickSortM.h"
+#include "IntroSort.h"
 
-
-#define LOG1_FILE "logs/log1.txt"
-#define LOG2_FILE "logs/log2.txt"
-
-#define LINES_IN_GROUP_COUNT    1000lu
-#define GROUPS_COUNT            4u
 
 #define ERROR   -1
 #define ALWAYS  1
 
+#define DATA_FILE_NAME  argv[1]
+#define LOG_FILE_NAME   argv[2]
+
+
 void CheckFilesErr(
-    const FILE* _data_f,
-    char* _data_f_name,
-    const FILE* _log1_f,
-    const FILE* _log2_f);
+    const FILE* _data_f, const char* _data_f_name,
+    const FILE* _log_f, const char* _log_f_name);
 
 uint64_t* CloneArray(const uint64_t* _array, size_t _array_size);
 
@@ -31,34 +27,18 @@ int main(int argc, char** argv)
 {
     if(argc < 2)
     {
-        printf("ERROR::MAIN::No input file.\n");
+        printf("ERROR::MAIN::Few arguments.\n./Timing.elf <data_file_name> <log_file_name>\n");
         exit(ERROR);
     }
     
     printf("Timing program was began.\n");
     
-    char* log_files_way = "logs";
-    char* log1_file_name = "log1";
-    char* log2_file_name = "log2";
-    
-    char* log1_file_full_name = (char*)malloc(sizeof(char));
-    char* log2_file_full_name = (char*)malloc(sizeof(char));
-    
-    log1_file_full_name[0] = '\0';
-    log2_file_full_name[0] = '\0';
-    
-    sprintf(log1_file_full_name, "%s/%s.log",
-        log_files_way, log1_file_name);
-    sprintf(log2_file_full_name, "%s/%s.log",
-        log_files_way, log2_file_name);
-    
-    FILE* data_file = fopen(argv[1], "r");    
-    FILE* log1_file = fopen(log1_file_full_name, "w+");
-    FILE* log2_file = fopen(log2_file_full_name, "w+");
+    FILE* data_file = fopen(DATA_FILE_NAME, "r");    
+    FILE* log_file = fopen(LOG_FILE_NAME, "w+");
     
     size_t line_number = 0lu;
     
-    CheckFilesErr(data_file, argv[1], log1_file, log2_file);
+    CheckFilesErr(data_file, DATA_FILE_NAME, log_file, LOG_FILE_NAME);
     
     while(ALWAYS)
     {
@@ -70,42 +50,34 @@ int main(int argc, char** argv)
         uint64_t* array = (uint64_t*)malloc(sizeof(uint64_t) * array_length);
         fread(array, sizeof(uint64_t), array_length, data_file);
         
-        uint64_t* clone1_arr = CloneArray(array, array_length);
-        uint64_t* clone2_arr = CloneArray(array, array_length);
-        fprintf(log1_file, "%lu\t%lf\n", array_length, GetSortTime(ShakeSort, clone1_arr, array_length));
-        fprintf(log2_file, "%lu\t%lf\n", array_length, GetSortTime(QuickSort, clone2_arr, array_length));
+        fprintf(log_file, "%lu\t%lf\n", array_length, GetSortTime(IntroSort, array, array_length));
         
         free(array);
-        free(clone1_arr);
-        free(clone2_arr);
         
+        printf("array: %lu\r", line_number);
         line_number++;
+        
     }
     
-    fclose(log1_file);
-    fclose(log2_file);
+    fclose(log_file);
     fclose(data_file);
     
     printf(
-        "\n\nProgram finished succsessfully.\n%lu lines was sorted.\nResults was wrote in %s folder.\n",
-        line_number, log_files_way);
+        "\n\nProgram finished succsessfully.\n%lu lines was sorted.\nResults was wrote in %s.\n",
+        line_number, LOG_FILE_NAME);
 }
 
-void CheckFilesErr(const FILE* _data_f, char* _data_f_name, const FILE* _log1_f, const FILE* _log2_f)
+void CheckFilesErr(const FILE* _data_f, const char* _data_f_name, const FILE* _log_f, const char* _log_f_name)
 {    
     if(_data_f == NULL)
     {
         printf("ERROR::MAIN::Can not open data file.\nFile name: %s\n", _data_f_name);
     }
-    if(_log1_f == NULL)
+    if(_log_f == NULL)
     {
-        printf("ERROR::MAIN::Can not open log file.\nFile name: %s\n", LOG1_FILE);
+        printf("ERROR::MAIN::Can not open log file.\nFile name: %s\n", _log_f_name);
     }
-    if(_log2_f == NULL)
-    {
-        printf("ERROR::MAIN::Can not open log file.\nFile name: %s\n", LOG2_FILE);
-    }
-    if(_data_f == NULL || _log1_f == NULL || _log2_f == NULL)
+    if(_data_f == NULL || _log_f == NULL)
     {
         exit(ERROR);
     }
