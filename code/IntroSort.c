@@ -2,7 +2,7 @@
 
 #define Swap(type, a, b) type Swap_buff = (a); (a) = (b); (b) = (Swap_buff);
 
-void SumArr(
+void ConnectArr(
     uint64_t* ar,
     uint64_t* a1, size_t s1,
     uint64_t* a2, size_t s2,
@@ -58,7 +58,7 @@ void QuickSortM(uint64_t* _array, size_t _array_size, size_t req_num)
         PiramidSort(_high_array, _high_i);
     }
     
-    SumArr(
+    ConnectArr(
         _array,
         _low_array, _low_i,
         _equal_array, _equal_i,
@@ -70,7 +70,7 @@ void QuickSortM(uint64_t* _array, size_t _array_size, size_t req_num)
     
 }
 
-void SumArr(uint64_t* ar, uint64_t* a1, size_t s1, uint64_t* a2, size_t s2, uint64_t* a3, size_t s3)
+void ConnectArr(uint64_t* ar, uint64_t* a1, size_t s1, uint64_t* a2, size_t s2, uint64_t* a3, size_t s3)
 {        
     size_t pos = 0;
     
