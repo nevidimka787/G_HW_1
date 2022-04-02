@@ -131,7 +131,7 @@ void PiramidSort(uint64_t* _array, size_t _size)
 
 void IntroSort(uint64_t* _array, size_t _size)
 {
-    QuickSortM(_array, _size, INTRO_SORT_MAX_REQURSIONS_COUNT);
+    QuickSortM(_array, _size, (size_t)log2((double)_size));
 }
 
 

@@ -5,7 +5,7 @@ The GROUPS_COUNT is log[EXP_STEP](ELEMENTS_FINISH_COUNT / ELEMENTS_START_COUNT) 
 The first value in the line store a data about count of elements in current line.
 */
 
-#define SHAKE
+#define INTRO
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,7 +26,7 @@ The first value in the line store a data about count of elements in current line
 #endif //SHAKE
 
 
-#define LINES_IN_BLOCK  4
+#define LINES_IN_BLOCK  10
 #define DELTA           0.01f
 
 #define ARRAY_FILE_NAME argv[1]

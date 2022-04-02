@@ -5,11 +5,16 @@ BIN = bin
 
 CLEAN_COMMAND = rm -rf $(BIN)/*.o *.o
 
-LIBS = 
+LIBS = -lm
 
 SORTS = "$(BIN)/ShakeSort.o" "$(BIN)/IntroSort.o"
 
 all: timing check
+
+help:
+	echo "timinf -- build timing program"
+	echo "check -- build arrays checking program"
+	echo "array_creator -- boild arrays creator program"
 
 array_creator:
 	rm -rf "$(BIN)/ArrayFileCreator.o"
@@ -17,13 +22,13 @@ array_creator:
 	$(CC) "$(BIN)/ArrayFileCreator.o" -o "ArrCreator.elf"
 	
 timing: $(SORTS) "$(BIN)/main_timing.o"
-	$(CC) $(SORTS) "$(BIN)/main_timing.o" -o "Timing.elf"
+	$(CC) $(SORTS) $(LIBS) "$(BIN)/main_timing.o" -o "Timing.elf"
 	
 check: $(SORTS) "$(BIN)/main_check.o"
-	$(CC) $(SORTS) "$(BIN)/main_check.o" -o "Check.elf"
+	$(CC) $(SORTS) $(LIBS) "$(BIN)/main_check.o" -o "Check.elf"
 	
 test: $(SORTS) "$(BIN)/main_test.o"
-	$(CC) $(SORTS) "$(BIN)/main_test.o" -o "Test.elf"
+	$(CC) $(SORTS) $(LIBS) "$(BIN)/main_test.o" -o "Test.elf"
 	
 
 rebuild: clean all

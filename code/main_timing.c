@@ -40,9 +40,10 @@ int main(int argc, char** argv)
     
     CheckFilesErr(data_file, DATA_FILE_NAME, log_file, LOG_FILE_NAME);
     
+    size_t array_length;
+    
     while(ALWAYS)
     {
-        size_t array_length;
         if(fread(&array_length, sizeof(uint64_t), 1u, data_file) == 0)
         {//end of file detected
             break;
